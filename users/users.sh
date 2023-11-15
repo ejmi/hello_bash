@@ -9,9 +9,12 @@ while [[ $number_user -gt 0 ]]; do
     number_user=$(($number_user - 1))
 done
 
-users=`sudo cat /etc/passwd | grep /home | tr ' ' '_'`
+function getUsers() {
+    cat /etc/passwd | grep /home | tr ' ' '_'
+}
 
-function showUsers() { 
+function showUsers() {
+    users=$(getUsers)
     for user in ${users}; do
         echo "User found!"
         login=$(echo $user | cut -d: -f1)
@@ -23,11 +26,12 @@ function showUsers() {
     done
 }
 
-showUsers $users
+showUsers
 
 read -p "Press enter to continue" press;
 
 if $press; then
+    users=$(getUsers)
     for user in ${users}; do
         login=$(echo $user | cut -d: -f1)
         str="user_"
@@ -38,5 +42,4 @@ if $press; then
     done
 fi
 
-users=`sudo cat /etc/passwd | grep /home | tr ' ' '_'`
-showUsers $users
+showUsers
